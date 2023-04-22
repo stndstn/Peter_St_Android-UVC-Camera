@@ -904,10 +904,19 @@ public class SetUpTheUsbDeviceUvc extends Activity {
                 log("Interface " + intLoop +  " has " + interfaceArray[intLoop].num_altsetting + " altsettings\n");
                 streamInterfaceEntries.append("\nInterface " + intLoop +  " has " + interfaceArray[intLoop].num_altsetting + " altsettings\n");
 
+                // to get altsettingArray properly (T.Tateishi)
+                //final JNA_I_LibUsb.libusb_interface_descriptor[] altsettingArray = (JNA_I_LibUsb.libusb_interface_descriptor[])
+                //        interfaceArray[uvc_device_info.stream_ifs.bInterfaceNumber].altsetting.toArray(interfaceArray[uvc_device_info.stream_ifs.bInterfaceNumber].num_altsetting)  ;
                 final JNA_I_LibUsb.libusb_interface_descriptor[] altsettingArray = (JNA_I_LibUsb.libusb_interface_descriptor[])
-                        interfaceArray[uvc_device_info.stream_ifs.bInterfaceNumber].altsetting.toArray(interfaceArray[uvc_device_info.stream_ifs.bInterfaceNumber].num_altsetting)  ;
+                        interfaceArray[intLoop].altsetting.toArray(interfaceArray[intLoop].num_altsetting)  ;
                 //log("altsettingArray obtained");
                 for (int altLoop=0; altLoop<interfaceArray[intLoop].num_altsetting; altLoop++) {
+                    // to avoid ArrayIndexOutOfBoundsException (T.Tateishi)
+                    if(altsettingArray.length == altLoop){
+                        log("break to avoid ArrayIndexOutOfBoundsException of altsettingArray");
+                        break;
+                    }
+
                     if(altsettingArray[altLoop].endpoint != null) {
                         log("Altsetting " + altLoop +  " has a packetSize of: " + returnConvertedValue(altsettingArray[altLoop].endpoint.wMaxPacketSize)  + " \n");
                         streamInterfaceEntries.append("   Altsetting " + altLoop +  " maxPacketSize: " + returnConvertedValue(altsettingArray[altLoop].endpoint.wMaxPacketSize) + " \n");

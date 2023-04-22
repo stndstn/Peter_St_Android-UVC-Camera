@@ -89,3 +89,7 @@ app/.cxx/
 # Use the backslash as escape character to ignore files with a hash (#)
 # (supported since 1.6.2.1)
 #\#*#
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/outputFiles.bin
+.gradle/checksums/checksums.lock
+.gradle/checksums/sha1-checksums.bin
